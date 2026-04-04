@@ -3,13 +3,17 @@ import {
   CloudSun,
   Cloud,
   CloudRain,
+  CloudSnow,
+  CloudLightning,
+  CloudFog,
+  CloudDrizzle,
   Sunrise,
   Sunset,
   Wind,
   Droplets,
   Gauge,
   Umbrella,
-  Thermometer,
+  Moon,
 } from "lucide-react";
 import placeholderWeather from "../data/placeholderWeather";
 
@@ -18,22 +22,34 @@ const weatherIcons = {
   "cloud-sun": CloudSun,
   cloud: Cloud,
   "cloud-rain": CloudRain,
+  "cloud-snow": CloudSnow,
+  "cloud-lightning": CloudLightning,
+  "cloud-fog": CloudFog,
+  "cloud-drizzle": CloudDrizzle,
+  moon: Moon,
 };
 
 function WeatherCard() {
   const weather = placeholderWeather;
 
+  const ConditionIcon = weatherIcons[weather.conditionIcon] || Cloud;
+
   return (
     <div className="card weather-card">
       <div className="weather-header">
         <div className="weather-main">
-          <div className="weather-temp-group">
-            <span className="weather-temp">{weather.temperature}°</span>
-            <span className="weather-condition">{weather.condition}</span>
-          </div>
-          <div className="weather-hilo">
-            <span>H: {weather.high}°</span>
-            <span>L: {weather.low}°</span>
+          <div className="weather-temp-row">
+            <ConditionIcon size={64} className="weather-condition-icon" />
+            <div className="weather-temp-group">
+              <span className="weather-temp">{weather.temperature}°</span>
+              <div className="weather-temp-meta">
+                <span className="weather-condition">{weather.condition}</span>
+                <div className="weather-hilo">
+                  <span>H: {weather.high}°</span>
+                  <span>L: {weather.low}°</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="weather-location">{weather.location}</div>

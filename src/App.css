@@ -13,7 +13,7 @@
 /* ── Clock header ── */
 
 .clock-header {
-  text-align: center;
+  text-align: left;
   padding: 8px 0 4px;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .clock-date {
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   font-weight: 400;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
@@ -104,10 +104,21 @@
   justify-content: space-between;
 }
 
+.weather-temp-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.weather-condition-icon {
+  color: var(--clay);
+  flex-shrink: 0;
+}
+
 .weather-temp-group {
   display: flex;
   align-items: baseline;
-  gap: 14px;
+  gap: 16px;
 }
 
 .weather-temp {
@@ -116,6 +127,12 @@
   font-weight: 400;
   color: var(--walnut);
   line-height: 1;
+}
+
+.weather-temp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .weather-condition {

@@ -5,6 +5,7 @@ const placeholderWeather = {
   high: 68,
   low: 54,
   condition: "Partly Cloudy",
+  conditionIcon: "cloud-sun",
   humidity: 72,
   windSpeed: 12,
   windDirection: "NW",
