@@ -1,0 +1,55 @@
+/* ── Morning Dashboard — Mid-Century Modern + Claude warmth ── */
+
+:root {
+  /* Claude-inspired warm palette */
+  --clay:        #D97757;   /* Claude's signature orange */
+  --clay-light:  #E8956F;
+  --clay-glow:   rgba(217, 119, 87, 0.12);
+  --terracotta:  #C4613E;
+  --sage:        #7A9E7E;   /* organic green accent */
+  --sage-light:  #95B898;
+  --sage-glow:   rgba(122, 158, 126, 0.10);
+  --cream:       #FDF6F0;
+  --cream-warm:  #FAF0E6;
+  --linen:       #F5E6D8;
+  --walnut:      #3D2B1F;
+  --walnut-soft: #5C4033;
+  --espresso:    #2C1810;
+  --text-primary:   #3D2B1F;
+  --text-secondary: #7A6B5D;
+  --text-muted:     #A89888;
+  --card-bg:     rgba(255, 255, 255, 0.72);
+  --card-border: rgba(197, 170, 145, 0.25);
+  --card-shadow: 0 2px 20px rgba(60, 40, 20, 0.06),
+                 0 1px 4px rgba(60, 40, 20, 0.04);
+
+  /* Typography */
+  --font-display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 20% 0%, var(--clay-glow) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, var(--sage-glow) 0%, transparent 50%),
+    var(--cream);
+}
+
+#root {
+  min-height: 100dvh;
+}
