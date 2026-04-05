@@ -174,20 +174,22 @@ function WeatherCard() {
       </div>
 
       <div className="weather-gauges">
-        <ScaleBar
-          value={weather.airQuality.index}
-          max={500}
-          segments={aqiSegments}
-          label="Air Quality"
-          icon={Gauge}
-        />
+        <div className="weather-gauges-row">
+          <ScaleBar
+            value={weather.airQuality.index}
+            max={500}
+            segments={aqiSegments}
+            label="Air Quality"
+            icon={Gauge}
+          />
 
-        <PercentBar
-          value={weather.humidity}
-          label="Humidity"
-          icon={Droplets}
-          color="var(--sage)"
-        />
+          <PercentBar
+            value={weather.humidity}
+            label="Humidity"
+            icon={Droplets}
+            color="var(--sage)"
+          />
+        </div>
 
         <PercentBar
           value={weather.rain.chance}
