@@ -1,0 +1,17 @@
+{
+  "name": "Morning Dashboard",
+  "short_name": "Dashboard",
+  "description": "A personal morning dashboard for your tablet",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#E8EDE4",
+  "theme_color": "#D97757",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

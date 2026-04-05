@@ -46,6 +46,16 @@ body {
   min-height: 100dvh;
   background: var(--sage-glow);
   background-color: #E8EDE4;
+  /* Tablet kiosk: prevent pull-to-refresh & overscroll bounce */
+  overscroll-behavior: none;
+  overflow: hidden;
+  /* Prevent text selection on UI chrome (notes textarea overrides this) */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Prevent tap highlight on touch */
+  -webkit-tap-highlight-color: transparent;
+  /* Prevent callout on long-press (iOS) */
+  -webkit-touch-callout: none;
 }
 
 body::before {
@@ -62,4 +72,10 @@ body::before {
   min-height: 100dvh;
   position: relative;
   z-index: 1;
+}
+
+/* Allow text selection inside the notes textarea */
+.notes-textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }

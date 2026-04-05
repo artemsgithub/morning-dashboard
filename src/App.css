@@ -4,10 +4,18 @@
   max-width: 1120px;
   margin: 0 auto;
   padding: 40px 28px 48px;
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   gap: 32px;
+  overflow: hidden;
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+
+/* ── Night mode — dims display 10pm–6am to save screen & eyes ── */
+
+.dashboard.night-mode {
+  filter: brightness(0.45);
 }
 
 /* ── Clock header ── */
@@ -42,6 +50,7 @@
   grid-template-columns: 1.4fr 1fr;
   gap: 24px;
   flex: 1;
+  min-height: 0; /* allow grid to shrink within flex */
 }
 
 .dashboard-sidebar {
@@ -90,6 +99,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .weather-header {
