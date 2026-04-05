@@ -117,8 +117,8 @@ function SunArc({ sunrise, sunset }) {
             strokeDashoffset="68"
           />
           {/* sun dot */}
-          <circle cx="130" cy="18" r="6" fill="var(--clay)" />
-          <circle cx="130" cy="18" r="9" fill="var(--clay)" opacity="0.15" />
+          <circle cx="130" cy="18" r="8" fill="var(--clay)" />
+          <circle cx="130" cy="18" r="12" fill="var(--clay)" opacity="0.15" />
         </svg>
         <div className="sun-arc-labels">
           <div className="sun-arc-time">
@@ -166,7 +166,7 @@ function WeatherCard() {
           return (
             <div key={hour.time} className="hourly-item">
               <span className="hourly-time">{hour.time}</span>
-              <Icon size={20} />
+              <Icon size={26} />
               <span className="hourly-temp">{hour.temp}°</span>
             </div>
           );
