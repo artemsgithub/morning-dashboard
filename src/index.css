@@ -44,12 +44,22 @@
 
 body {
   min-height: 100dvh;
-  background:
-    radial-gradient(ellipse at 20% 0%, var(--sage-glow) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(122, 158, 126, 0.08) 0%, transparent 50%),
-    var(--cream);
+  background: var(--sage-glow);
+  background-color: #E8EDE4;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+  filter: url(#grain);
 }
 
 #root {
   min-height: 100dvh;
+  position: relative;
+  z-index: 1;
 }
