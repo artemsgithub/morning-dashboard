@@ -1,16 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { getRandomAffirmation } from "../data/affirmations";
 
-function AffirmationCard() {
-  const [affirmation, setAffirmation] = useState("");
+const STORAGE_KEY = "morning-dashboard-affirmation";
+const DATE_KEY = "morning-dashboard-affirmation-date";
 
-  useEffect(() => {
-    setAffirmation(getRandomAffirmation());
-  }, []);
+function getTodayString() {
+  return new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD
+}
+
+function getDailyAffirmation() {
+  const today = getTodayString();
+  const savedDate = localStorage.getItem(DATE_KEY);
+  const savedAffirmation = localStorage.getItem(STORAGE_KEY);
+
+  if (savedDate === today && savedAffirmation) {
+    return savedAffirmation;
+  }
+
+  const fresh = getRandomAffirmation();
+  localStorage.setItem(STORAGE_KEY, fresh);
+  localStorage.setItem(DATE_KEY, today);
+  return fresh;
+}
+
+function AffirmationCard() {
+  const [affirmation, setAffirmation] = useState(getDailyAffirmation);
 
   function refresh() {
-    setAffirmation(getRandomAffirmation());
+    const fresh = getRandomAffirmation();
+    localStorage.setItem(STORAGE_KEY, fresh);
+    localStorage.setItem(DATE_KEY, getTodayString());
+    setAffirmation(fresh);
   }
 
   return (
