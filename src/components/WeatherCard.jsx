@@ -29,9 +29,114 @@ const weatherIcons = {
   moon: Moon,
 };
 
+/* AQI: 0-50 Good, 51-100 Moderate, 101-150 Unhealthy for sensitive,
+   151-200 Unhealthy, 201-300 Very Unhealthy, 301-500 Hazardous */
+const aqiSegments = [
+  { max: 50, label: "Good", color: "#7A9E7E" },
+  { max: 100, label: "Moderate", color: "#D4A843" },
+  { max: 150, label: "Sensitive", color: "#D97757" },
+  { max: 200, label: "Unhealthy", color: "#C4613E" },
+  { max: 300, label: "Very Unhealthy", color: "#8B4049" },
+  { max: 500, label: "Hazardous", color: "#5C2033" },
+];
+
+function ScaleBar({ value, max, segments, label, icon: Icon }) {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div className="scale-bar-container">
+      <div className="scale-bar-header">
+        <Icon size={16} />
+        <span className="detail-label">{label}</span>
+      </div>
+      <div className="scale-bar-track">
+        <div className="scale-bar-gradient">
+          {segments.map((seg, i) => (
+            <div
+              key={i}
+              className="scale-bar-segment"
+              style={{
+                flex: i === 0 ? seg.max : seg.max - segments[i - 1].max,
+                backgroundColor: seg.color,
+              }}
+            />
+          ))}
+        </div>
+        <div
+          className="scale-bar-pointer"
+          style={{ left: `${pct}%` }}
+        >
+          <div className="scale-bar-needle" />
+        </div>
+      </div>
+      <div className="scale-bar-value">{value} — {segments.find(s => value <= s.max)?.label}</div>
+    </div>
+  );
+}
+
+function PercentBar({ value, label, icon: Icon, color }) {
+  return (
+    <div className="scale-bar-container">
+      <div className="scale-bar-header">
+        <Icon size={16} />
+        <span className="detail-label">{label}</span>
+        <span className="percent-value">{value}%</span>
+      </div>
+      <div className="percent-bar-track">
+        <div
+          className="percent-bar-fill"
+          style={{ width: `${value}%`, backgroundColor: color }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SunArc({ sunrise, sunset }) {
+  return (
+    <div className="sun-arc-container">
+      <div className="sun-arc-header">
+        <span className="detail-label">Daylight</span>
+      </div>
+      <div className="sun-arc-visual">
+        <svg viewBox="0 0 200 70" className="sun-arc-svg">
+          {/* arc path */}
+          <path
+            d="M 10 60 Q 100 -10 190 60"
+            fill="none"
+            stroke="var(--card-border)"
+            strokeWidth="2"
+            strokeDasharray="4 3"
+          />
+          {/* filled portion — placeholder at ~60% of day */}
+          <path
+            d="M 10 60 Q 100 -10 190 60"
+            fill="none"
+            stroke="var(--clay)"
+            strokeWidth="2.5"
+            strokeDasharray="170"
+            strokeDashoffset="68"
+          />
+          {/* sun dot */}
+          <circle cx="130" cy="18" r="6" fill="var(--clay)" />
+          <circle cx="130" cy="18" r="9" fill="var(--clay)" opacity="0.15" />
+        </svg>
+        <div className="sun-arc-labels">
+          <div className="sun-arc-time">
+            <Sunrise size={14} />
+            <span>{sunrise}</span>
+          </div>
+          <div className="sun-arc-time">
+            <Sunset size={14} />
+            <span>{sunset}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function WeatherCard() {
   const weather = placeholderWeather;
-
   const ConditionIcon = weatherIcons[weather.conditionIcon] || Cloud;
 
   return (
@@ -68,56 +173,45 @@ function WeatherCard() {
         })}
       </div>
 
-      <div className="weather-details">
-        <div className="weather-detail-item">
-          <Sunrise size={18} />
-          <div>
-            <span className="detail-label">Sunrise</span>
-            <span className="detail-value">{weather.sunrise}</span>
+      <div className="weather-gauges">
+        <ScaleBar
+          value={weather.airQuality.index}
+          max={500}
+          segments={aqiSegments}
+          label="Air Quality"
+          icon={Gauge}
+        />
+
+        <PercentBar
+          value={weather.humidity}
+          label="Humidity"
+          icon={Droplets}
+          color="var(--sage)"
+        />
+
+        <PercentBar
+          value={weather.rain.chance}
+          label={weather.rain.willRain ? `Rain — ${weather.rain.when}` : "Rain"}
+          icon={Umbrella}
+          color="var(--clay)"
+        />
+
+        <div className="weather-gauges-row">
+          <div className="scale-bar-container">
+            <div className="scale-bar-header">
+              <Wind size={16} />
+              <span className="detail-label">Wind</span>
+            </div>
+            <div className="wind-display">
+              <span className="wind-speed">{weather.windSpeed}</span>
+              <div className="wind-meta">
+                <span className="wind-unit">mph</span>
+                <span className="wind-dir">{weather.windDirection}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="weather-detail-item">
-          <Sunset size={18} />
-          <div>
-            <span className="detail-label">Sunset</span>
-            <span className="detail-value">{weather.sunset}</span>
-          </div>
-        </div>
-        <div className="weather-detail-item">
-          <Wind size={18} />
-          <div>
-            <span className="detail-label">Wind</span>
-            <span className="detail-value">
-              {weather.windSpeed} mph {weather.windDirection}
-            </span>
-          </div>
-        </div>
-        <div className="weather-detail-item">
-          <Gauge size={18} />
-          <div>
-            <span className="detail-label">Air Quality</span>
-            <span className="detail-value">
-              {weather.airQuality.index} — {weather.airQuality.label}
-            </span>
-          </div>
-        </div>
-        <div className="weather-detail-item">
-          <Droplets size={18} />
-          <div>
-            <span className="detail-label">Humidity</span>
-            <span className="detail-value">{weather.humidity}%</span>
-          </div>
-        </div>
-        <div className="weather-detail-item">
-          <Umbrella size={18} />
-          <div>
-            <span className="detail-label">Rain</span>
-            <span className="detail-value">
-              {weather.rain.willRain
-                ? `${weather.rain.chance}% — ${weather.rain.when}`
-                : "Not expected"}
-            </span>
-          </div>
+
+          <SunArc sunrise={weather.sunrise} sunset={weather.sunset} />
         </div>
       </div>
     </div>

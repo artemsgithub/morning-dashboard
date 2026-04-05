@@ -191,29 +191,33 @@
   color: var(--clay);
 }
 
-/* Detail grid */
+/* Detail gauges */
 
-.weather-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px 24px;
-}
-
-.weather-detail-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.weather-detail-item svg {
-  color: var(--sage);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.weather-detail-item div {
+.weather-gauges {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+.weather-gauges-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Scale bar (AQI-style segmented) */
+
+.scale-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scale-bar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sage);
 }
 
 .detail-label {
@@ -224,10 +228,134 @@
   letter-spacing: 0.4px;
 }
 
-.detail-value {
-  font-size: 0.92rem;
-  color: var(--text-primary);
+.scale-bar-header .detail-label {
+  flex: 1;
+}
+
+.scale-bar-track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.scale-bar-gradient {
+  display: flex;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.scale-bar-segment {
+  height: 100%;
+}
+
+.scale-bar-pointer {
+  position: absolute;
+  top: -3px;
+  transform: translateX(-50%);
+  transition: left 0.4s ease;
+}
+
+.scale-bar-needle {
+  width: 4px;
+  height: 14px;
+  background: var(--walnut);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.scale-bar-value {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
   font-weight: 500;
+}
+
+/* Percent bar (humidity, rain) */
+
+.percent-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--walnut);
+  margin-left: auto;
+}
+
+.percent-bar-track {
+  height: 8px;
+  background: rgba(197, 170, 145, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.percent-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Wind display */
+
+.wind-display {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.wind-speed {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--walnut);
+  line-height: 1;
+}
+
+.wind-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.wind-unit {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.wind-dir {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Sun arc */
+
+.sun-arc-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sun-arc-svg {
+  width: 100%;
+  height: auto;
+}
+
+.sun-arc-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sun-arc-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.sun-arc-time svg {
+  color: var(--clay);
 }
 
 /* ── Affirmation card ── */
