@@ -14,8 +14,9 @@ import {
   Gauge,
   Umbrella,
   Moon,
+  RefreshCw,
 } from "lucide-react";
-import placeholderWeather from "../data/placeholderWeather";
+import useWeather from "../hooks/useWeather";
 
 const weatherIcons = {
   sun: Sun,
@@ -99,7 +100,6 @@ function SunArc({ sunrise, sunset }) {
       </div>
       <div className="sun-arc-visual">
         <svg viewBox="0 0 200 70" className="sun-arc-svg">
-          {/* arc path */}
           <path
             d="M 10 60 Q 100 -10 190 60"
             fill="none"
@@ -107,7 +107,6 @@ function SunArc({ sunrise, sunset }) {
             strokeWidth="2"
             strokeDasharray="4 3"
           />
-          {/* filled portion — placeholder at ~60% of day */}
           <path
             d="M 10 60 Q 100 -10 190 60"
             fill="none"
@@ -116,7 +115,6 @@ function SunArc({ sunrise, sunset }) {
             strokeDasharray="170"
             strokeDashoffset="68"
           />
-          {/* sun dot */}
           <circle cx="130" cy="18" r="8" fill="var(--clay)" />
           <circle cx="130" cy="18" r="12" fill="var(--clay)" opacity="0.15" />
         </svg>
@@ -136,7 +134,7 @@ function SunArc({ sunrise, sunset }) {
 }
 
 function WeatherCard() {
-  const weather = placeholderWeather;
+  const { weather, loading, refresh } = useWeather();
   const ConditionIcon = weatherIcons[weather.conditionIcon] || Cloud;
 
   return (
@@ -216,6 +214,16 @@ function WeatherCard() {
           <SunArc sunrise={weather.sunrise} sunset={weather.sunset} />
         </div>
       </div>
+
+      <button
+        className="weather-refresh"
+        onClick={refresh}
+        disabled={loading}
+        title="Refresh weather"
+      >
+        <RefreshCw size={14} className={loading ? "spin" : ""} />
+        <span>{loading ? "Updating…" : "Refresh"}</span>
+      </button>
     </div>
   );
 }

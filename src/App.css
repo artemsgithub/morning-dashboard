@@ -377,6 +377,44 @@
   height: 18px;
 }
 
+/* Weather refresh button */
+
+.weather-refresh {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.weather-refresh:hover {
+  color: var(--clay);
+  border-color: var(--clay);
+}
+
+.weather-refresh:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.weather-refresh .spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* ── Affirmation card ── */
 
 .affirmation-card {
