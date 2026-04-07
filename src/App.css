@@ -127,7 +127,6 @@
 }
 
 .weather-condition-icon {
-  color: var(--clay);
   flex-shrink: 0;
 }
 
@@ -206,9 +205,6 @@
   color: var(--walnut);
 }
 
-.hourly-item svg {
-  color: var(--clay);
-}
 
 /* Detail gauges */
 

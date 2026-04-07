@@ -30,6 +30,24 @@ const weatherIcons = {
   moon: Moon,
 };
 
+/* Colors tuned to the mid-century warm palette —
+   warm sunlit tones for clear/sunny, muted cools for wet/cold. */
+const weatherIconColors = {
+  sun:              "#E8A33D", // golden amber
+  "cloud-sun":      "#D4A843", // muted gold
+  cloud:            "#A89888", // warm gray
+  "cloud-rain":     "#6B8897", // dusky blue-gray
+  "cloud-drizzle":  "#8FA3A8", // lighter blue-gray
+  "cloud-snow":     "#B8C4C4", // pale cool
+  "cloud-lightning":"#C48A2E", // darker amber
+  "cloud-fog":      "#9A8A7C", // muted fog gray
+  moon:             "#7A8899", // dusky indigo
+};
+
+function iconColor(key) {
+  return weatherIconColors[key] || "var(--sage)";
+}
+
 /* AQI: 0-50 Good, 51-100 Moderate, 101-150 Unhealthy for sensitive,
    151-200 Unhealthy, 201-300 Very Unhealthy, 301-500 Hazardous */
 const aqiSegments = [
@@ -157,7 +175,11 @@ function WeatherCard() {
       <div className="weather-header">
         <div className="weather-main">
           <div className="weather-temp-row">
-            <ConditionIcon size={64} className="weather-condition-icon" />
+            <ConditionIcon
+              size={64}
+              className="weather-condition-icon"
+              color={iconColor(weather.conditionIcon)}
+            />
             <div className="weather-temp-group">
               <span className="weather-temp">{weather.temperature}°</span>
               <div className="weather-temp-meta">
@@ -179,7 +201,7 @@ function WeatherCard() {
           return (
             <div key={hour.time} className="hourly-item">
               <span className="hourly-time">{hour.time}</span>
-              <Icon size={26} />
+              <Icon size={26} color={iconColor(hour.icon)} />
               <span className="hourly-temp">{hour.temp}°</span>
             </div>
           );
