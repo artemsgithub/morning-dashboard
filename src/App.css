@@ -23,6 +23,9 @@
 .clock-header {
   text-align: left;
   padding: 8px 0 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 32px;
 }
 
 .clock-time {
@@ -41,7 +44,7 @@
   font-weight: 700;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 /* ── Grid ── */
@@ -120,6 +123,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .weather-condition-icon {
@@ -162,9 +166,12 @@
 }
 
 .weather-location {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  font-style: italic;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-left: auto;
+  align-self: flex-end;
+  padding-bottom: 8px;
 }
 
 /* Hourly strip */
@@ -310,6 +317,52 @@
   transition: width 0.4s ease;
 }
 
+/* Inline percent bar — text/icon/value sit ON the bar */
+
+.inline-bar-track {
+  position: relative;
+  height: 38px;
+  background: rgba(197, 170, 145, 0.18);
+  border-radius: 19px;
+  overflow: hidden;
+}
+
+.inline-bar-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 19px;
+  opacity: 0.55;
+  transition: width 0.4s ease;
+}
+
+.inline-bar-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding: 0 18px;
+  color: var(--walnut);
+}
+
+.inline-bar-content svg {
+  color: var(--walnut);
+}
+
+.inline-bar-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  flex: 1;
+}
+
+.inline-bar-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
 /* Wind display */
 
 .wind-display {
@@ -354,7 +407,7 @@
 
 .sun-arc-svg {
   width: 100%;
-  height: auto;
+  height: 32px;
 }
 
 .sun-arc-labels {

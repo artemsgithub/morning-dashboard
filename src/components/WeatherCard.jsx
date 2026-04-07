@@ -92,6 +92,22 @@ function PercentBar({ value, label, icon: Icon, color }) {
   );
 }
 
+function InlinePercentBar({ value, label, icon: Icon, color }) {
+  return (
+    <div className="inline-bar-track">
+      <div
+        className="inline-bar-fill"
+        style={{ width: `${value}%`, backgroundColor: color }}
+      />
+      <div className="inline-bar-content">
+        <Icon size={18} />
+        <span className="inline-bar-label">{label}</span>
+        <span className="inline-bar-value">{value}%</span>
+      </div>
+    </div>
+  );
+}
+
 function SunArc({ sunrise, sunset }) {
   return (
     <div className="sun-arc-container">
@@ -99,24 +115,23 @@ function SunArc({ sunrise, sunset }) {
         <span className="detail-label">Daylight</span>
       </div>
       <div className="sun-arc-visual">
-        <svg viewBox="0 0 200 70" className="sun-arc-svg">
-          <path
-            d="M 10 60 Q 100 -10 190 60"
-            fill="none"
+        <svg viewBox="0 0 200 40" className="sun-arc-svg" preserveAspectRatio="none">
+          {/* dashed track — straight line */}
+          <line
+            x1="10" y1="20" x2="190" y2="20"
             stroke="var(--card-border)"
             strokeWidth="2"
             strokeDasharray="4 3"
           />
-          <path
-            d="M 10 60 Q 100 -10 190 60"
-            fill="none"
+          {/* filled portion */}
+          <line
+            x1="10" y1="20" x2="130" y2="20"
             stroke="var(--clay)"
             strokeWidth="2.5"
-            strokeDasharray="170"
-            strokeDashoffset="68"
           />
-          <circle cx="130" cy="18" r="8" fill="var(--clay)" />
-          <circle cx="130" cy="18" r="12" fill="var(--clay)" opacity="0.15" />
+          {/* sun dot */}
+          <circle cx="130" cy="20" r="8" fill="var(--clay)" />
+          <circle cx="130" cy="20" r="12" fill="var(--clay)" opacity="0.15" />
         </svg>
         <div className="sun-arc-labels">
           <div className="sun-arc-time">
@@ -153,9 +168,9 @@ function WeatherCard() {
                 </div>
               </div>
             </div>
+            <div className="weather-location">{weather.location}</div>
           </div>
         </div>
-        <div className="weather-location">{weather.location}</div>
       </div>
 
       <div className="weather-hourly">
@@ -189,7 +204,7 @@ function WeatherCard() {
           />
         </div>
 
-        <PercentBar
+        <InlinePercentBar
           value={weather.rain.chance}
           label={weather.rain.willRain ? `Rain — ${weather.rain.when}` : "Rain"}
           icon={Umbrella}
