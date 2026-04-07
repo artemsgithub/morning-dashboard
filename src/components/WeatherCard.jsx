@@ -137,35 +137,35 @@ function SunArc({ sunrise, sunset }) {
         <span className="detail-label">Daylight</span>
       </div>
       <div className="sun-arc-visual">
-        <svg viewBox="0 0 200 24" className="sun-arc-svg" preserveAspectRatio="none">
+        <svg viewBox="0 0 200 28" className="sun-arc-svg" preserveAspectRatio="none">
           {/* blue hour ticks — just outside the line */}
-          <line x1="2" y1="12" x2="9" y2="12" stroke="#6B8897" strokeWidth="7" strokeLinecap="round" />
-          <line x1="191" y1="12" x2="198" y2="12" stroke="#6B8897" strokeWidth="7" strokeLinecap="round" />
+          <line x1="2" y1="14" x2="9" y2="14" stroke="#6B8897" strokeWidth="9" strokeLinecap="round" />
+          <line x1="191" y1="14" x2="198" y2="14" stroke="#6B8897" strokeWidth="9" strokeLinecap="round" />
 
           {/* dashed daylight track */}
           <line
-            x1="10" y1="12" x2="190" y2="12"
+            x1="10" y1="14" x2="190" y2="14"
             stroke="var(--card-border)"
-            strokeWidth="7"
+            strokeWidth="9"
             strokeDasharray="4 3"
             strokeLinecap="round"
           />
 
           {/* golden hour bands (first and last ~1/12 of the daylight line) */}
-          <line x1="10" y1="12" x2="25" y2="12" stroke="#E8A33D" strokeWidth="7" strokeLinecap="round" />
-          <line x1="175" y1="12" x2="190" y2="12" stroke="#E8A33D" strokeWidth="7" strokeLinecap="round" />
+          <line x1="10" y1="14" x2="25" y2="14" stroke="#E8A33D" strokeWidth="9" strokeLinecap="round" />
+          <line x1="175" y1="14" x2="190" y2="14" stroke="#E8A33D" strokeWidth="9" strokeLinecap="round" />
 
           {/* filled portion — progress through the day */}
           <line
-            x1="10" y1="12" x2="130" y2="12"
+            x1="10" y1="14" x2="130" y2="14"
             stroke="var(--clay)"
-            strokeWidth="7"
+            strokeWidth="9"
             strokeLinecap="round"
           />
 
           {/* sun dot */}
-          <circle cx="130" cy="12" r="9" fill="var(--clay)" />
-          <circle cx="130" cy="12" r="13" fill="var(--clay)" opacity="0.15" />
+          <circle cx="130" cy="14" r="11" fill="var(--clay)" />
+          <circle cx="130" cy="14" r="15" fill="var(--clay)" opacity="0.15" />
         </svg>
         <div className="sun-arc-labels">
           <div className="sun-arc-time">

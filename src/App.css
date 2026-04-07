@@ -221,19 +221,34 @@
 }
 
 .weather-gauges-row-triple {
-  grid-template-columns: 1fr 1.3fr auto;
-  gap: 28px;
+  display: flex;
   align-items: stretch;
+  gap: 0;
 }
 
-/* Normalize header row height across Wind / Daylight / Moon
-   so all three columns share a common top baseline. */
 .weather-gauges-row-triple > * {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 0 22px;
+  min-width: 0;
 }
 
+.weather-gauges-row-triple > *:first-child {
+  padding-left: 0;
+}
+
+.weather-gauges-row-triple > *:last-child {
+  padding-right: 0;
+}
+
+/* Thin vertical dividers matching the horizontal hourly-strip borders */
+.weather-gauges-row-triple > *:not(:last-child) {
+  border-right: 1px solid var(--card-border);
+}
+
+/* Normalize header row across the three columns */
 .weather-gauges-row-triple > * > .scale-bar-header,
 .weather-gauges-row-triple > * > .sun-arc-header {
   min-height: 22px;
@@ -463,7 +478,7 @@
 
 .sun-arc-svg {
   width: 100%;
-  height: 28px;
+  height: 32px;
   display: block;
 }
 
