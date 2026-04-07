@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ClockHeader from "./components/ClockHeader";
 import WeatherCard from "./components/WeatherCard";
-import NotesCard from "./components/NotesCard";
+import RemindersCard from "./components/RemindersCard";
 import AffirmationCard from "./components/AffirmationCard";
 import useWakeLock from "./hooks/useWakeLock";
 import "./App.css";
@@ -33,7 +33,7 @@ function App() {
         <WeatherCard />
         <div className="dashboard-sidebar">
           <AffirmationCard />
-          <NotesCard />
+          <RemindersCard />
         </div>
       </div>
     </div>

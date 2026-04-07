@@ -74,8 +74,9 @@ body::before {
   z-index: 1;
 }
 
-/* Allow text selection inside the notes textarea */
-.notes-textarea {
+/* Allow text selection inside reminder inputs */
+.reminder-input,
+.reminder-select {
   -webkit-user-select: text;
   user-select: text;
 }
