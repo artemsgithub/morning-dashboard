@@ -17,6 +17,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import useWeather from "../hooks/useWeather";
+import MoonPhase from "./MoonPhase";
 
 const weatherIcons = {
   sun: Sun,
@@ -127,6 +128,9 @@ function InlinePercentBar({ value, label, icon: Icon, color }) {
 }
 
 function SunArc({ sunrise, sunset }) {
+  // Daylight span on the SVG goes from x=10 to x=190 (180 units).
+  // Golden hour ≈ 1h at start and end of day (~1/12 of a 12h day ≈ 15 units).
+  // Blue hour ≈ 30 min just before sunrise / after sunset (~8 units just outside).
   return (
     <div className="sun-arc-container">
       <div className="sun-arc-header">
@@ -134,19 +138,29 @@ function SunArc({ sunrise, sunset }) {
       </div>
       <div className="sun-arc-visual">
         <svg viewBox="0 0 200 40" className="sun-arc-svg" preserveAspectRatio="none">
-          {/* dashed track — straight line */}
+          {/* blue hour ticks — just outside the line */}
+          <line x1="2" y1="20" x2="9" y2="20" stroke="#6B8897" strokeWidth="3" strokeLinecap="round" />
+          <line x1="191" y1="20" x2="198" y2="20" stroke="#6B8897" strokeWidth="3" strokeLinecap="round" />
+
+          {/* dashed daylight track */}
           <line
             x1="10" y1="20" x2="190" y2="20"
             stroke="var(--card-border)"
             strokeWidth="2"
             strokeDasharray="4 3"
           />
-          {/* filled portion */}
+
+          {/* golden hour bands (first and last ~1/12 of the daylight line) */}
+          <line x1="10" y1="20" x2="25" y2="20" stroke="#E8A33D" strokeWidth="3" strokeLinecap="round" />
+          <line x1="175" y1="20" x2="190" y2="20" stroke="#E8A33D" strokeWidth="3" strokeLinecap="round" />
+
+          {/* filled portion — progress through the day */}
           <line
             x1="10" y1="20" x2="130" y2="20"
             stroke="var(--clay)"
             strokeWidth="2.5"
           />
+
           {/* sun dot */}
           <circle cx="130" cy="20" r="8" fill="var(--clay)" />
           <circle cx="130" cy="20" r="12" fill="var(--clay)" opacity="0.15" />
@@ -233,7 +247,7 @@ function WeatherCard() {
           color="var(--clay)"
         />
 
-        <div className="weather-gauges-row">
+        <div className="weather-gauges-row weather-gauges-row-triple">
           <div className="scale-bar-container">
             <div className="scale-bar-header">
               <Wind size={16} />
@@ -247,6 +261,8 @@ function WeatherCard() {
               </div>
             </div>
           </div>
+
+          <MoonPhase />
 
           <SunArc sunrise={weather.sunrise} sunset={weather.sunset} />
         </div>
