@@ -235,6 +235,10 @@
   min-width: 0;
 }
 
+.weather-gauges-row-triple > *:nth-child(1) { flex: 0.65; }
+.weather-gauges-row-triple > *:nth-child(2) { flex: 1.7; }
+.weather-gauges-row-triple > *:nth-child(3) { flex: 1; }
+
 .weather-gauges-row-triple > *:first-child {
   padding-left: 0;
 }
