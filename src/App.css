@@ -982,3 +982,329 @@
     gap: 12px;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   Screensaver — full-screen animated overlay keyed to weather
+   Moves constantly to prevent OLED burn-in on always-on tablet
+   ════════════════════════════════════════════════════════════ */
+
+.screensaver {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  cursor: pointer;
+  background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(232, 163, 61, 0.12) 0%,
+      transparent 55%
+    ),
+    linear-gradient(160deg, #2b3428 0%, #1a2420 50%, #0f1815 100%);
+  animation: screensaver-enter 0.6s ease-out;
+}
+
+.screensaver-exiting {
+  animation: screensaver-exit 0.7s ease-in forwards;
+}
+
+@keyframes screensaver-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes screensaver-exit {
+  0%   { opacity: 1; transform: scale(1); filter: blur(0); }
+  60%  { opacity: 0.6; transform: scale(1.04); filter: blur(6px); }
+  100% { opacity: 0; transform: scale(1.08); filter: blur(14px); }
+}
+
+/* ── Clock overlay — drifts slowly to avoid burn-in ── */
+
+.screensaver-clock-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #f3e6d2;
+  z-index: 5;
+  animation: clock-drift 240s ease-in-out infinite;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+@keyframes clock-drift {
+  0%   { transform: translate(-50%, -50%); }
+  20%  { transform: translate(calc(-50% + 60px), calc(-50% - 40px)); }
+  40%  { transform: translate(calc(-50% - 50px), calc(-50% + 30px)); }
+  60%  { transform: translate(calc(-50% + 40px), calc(-50% + 50px)); }
+  80%  { transform: translate(calc(-50% - 60px), calc(-50% - 30px)); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+.screensaver-time {
+  font-family: var(--font-display);
+  font-size: 8rem;
+  font-weight: 400;
+  letter-spacing: -4px;
+  line-height: 1;
+}
+
+.screensaver-date {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 8px;
+  opacity: 0.88;
+}
+
+.screensaver-temp {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-top: 14px;
+  opacity: 0.72;
+  text-transform: capitalize;
+}
+
+.screensaver-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(243, 230, 210, 0.45);
+  z-index: 5;
+  animation: hint-pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.75; }
+}
+
+/* ── Scene base ── */
+
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ── Sun scene ── */
+
+.scene-sun {
+  background: linear-gradient(180deg, #e8a33d 0%, #d4793a 40%, #8a3f2a 100%);
+}
+
+.sun-glow {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 220, 140, 0.55) 0%,
+    rgba(255, 180, 80, 0.25) 25%,
+    transparent 55%
+  );
+  animation: sun-pulse 8s ease-in-out infinite;
+}
+
+.sun-core {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  margin: -110px 0 0 -110px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 40% 40%,
+    #fff3cc 0%,
+    #ffd98a 35%,
+    #e8a33d 75%,
+    rgba(232, 163, 61, 0) 100%
+  );
+  box-shadow: 0 0 120px 40px rgba(255, 200, 100, 0.35);
+  animation: sun-pulse 8s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+  50%      { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+/* ── Moon / night scene ── */
+
+.scene-moon {
+  background:
+    radial-gradient(ellipse at 70% 80%, rgba(80, 100, 140, 0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #0b1028 0%, #181f3d 50%, #0a0f20 100%);
+}
+
+.star {
+  position: absolute;
+  background: #f3e6d2;
+  border-radius: 50%;
+  animation: twinkle ease-in-out infinite;
+  box-shadow: 0 0 4px rgba(243, 230, 210, 0.8);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50%      { opacity: 1;   transform: scale(1.2); }
+}
+
+.moon-body {
+  position: absolute;
+  top: 20%;
+  right: 18%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #f3e6d2 0%,
+    #d8c4a0 55%,
+    #8a7856 100%
+  );
+  box-shadow:
+    0 0 60px rgba(243, 230, 210, 0.4),
+    0 0 120px rgba(243, 230, 210, 0.2),
+    inset -20px -20px 40px rgba(0, 0, 0, 0.35);
+  animation: moon-drift 60s ease-in-out infinite;
+}
+
+@keyframes moon-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-20px, -10px); }
+}
+
+/* ── Rain scene ── */
+
+.scene-rain {
+  background: linear-gradient(180deg, #3a4a55 0%, #2a3640 50%, #1a2128 100%);
+}
+
+.scene-rain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(107, 136, 151, 0.35) 0%,
+    transparent 60%
+  );
+}
+
+.raindrop {
+  position: absolute;
+  top: -60px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(180, 210, 230, 0) 0%,
+    rgba(180, 210, 230, 0.7) 50%,
+    rgba(180, 210, 230, 0.9) 100%
+  );
+  border-radius: 1px;
+  animation: rain-fall linear infinite;
+}
+
+@keyframes rain-fall {
+  0%   { transform: translateY(0);   opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0.7; }
+}
+
+/* ── Snow scene ── */
+
+.scene-snow {
+  background: linear-gradient(180deg, #5a6b78 0%, #3e4c58 60%, #2a343d 100%);
+}
+
+.snowflake {
+  position: absolute;
+  top: -40px;
+  color: #f3e6d2;
+  opacity: 0.85;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  animation: snow-fall linear infinite;
+  user-select: none;
+}
+
+@keyframes snow-fall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.9; }
+  100% { transform: translate(var(--drift, 0), 110vh) rotate(360deg); opacity: 0.3; }
+}
+
+/* ── Cloud scene (default/overcast/fog) ── */
+
+.scene-clouds {
+  background: linear-gradient(180deg, #7a8894 0%, #5c6872 50%, #3e4650 100%);
+}
+
+.drift-cloud {
+  position: absolute;
+  left: -240px;
+  width: 220px;
+  height: 80px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(243, 230, 210, 0.55) 0%,
+    rgba(243, 230, 210, 0.25) 45%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: cloud-drift linear infinite;
+  filter: blur(8px);
+}
+
+.drift-cloud::before,
+.drift-cloud::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.drift-cloud::before {
+  width: 120px;
+  height: 120px;
+  top: -50px;
+  left: 40px;
+}
+
+.drift-cloud::after {
+  width: 100px;
+  height: 100px;
+  top: -30px;
+  right: 30px;
+}
+
+@keyframes cloud-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 500px)); }
+}
+
+/* Shrink screensaver clock on smaller screens */
+
+@media (max-width: 768px) {
+  .screensaver-time { font-size: 5rem; letter-spacing: -2px; }
+  .screensaver-date { font-size: 1.2rem; }
+  .screensaver-temp { font-size: 0.95rem; }
+  .moon-body { width: 120px; height: 120px; top: 15%; right: 12%; }
+  .sun-glow { width: 600px; height: 600px; }
+  .sun-core { width: 150px; height: 150px; margin: -75px 0 0 -75px; }
+}
