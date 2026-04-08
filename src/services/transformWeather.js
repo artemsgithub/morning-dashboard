@@ -117,12 +117,31 @@ export function transformWeatherData({ current, forecast, airQuality }) {
   const condition = current.weather[0];
   const iconCode = condition.icon;
 
-  // Hourly — take the next 7 forecast entries (3-hour intervals)
-  const hourly = forecast.list.slice(0, 7).map((item) => ({
-    time: formatHour(item.dt),
-    temp: Math.round(item.main.temp),
-    icon: owmIconMap[item.weather[0].icon] || "cloud",
-  }));
+  // Hourly — take 16 forecast entries (3-hour intervals = 48 hours).
+  // That gives the user a full "scroll into tomorrow" experience.
+  // Mark the first entry of each new day so the UI can show a day label.
+  const indianaDay = (unix) =>
+    new Date(unix * 1000).toLocaleDateString("en-CA", {
+      timeZone: "America/Indiana/Indianapolis",
+    });
+
+  let lastDay = indianaDay(Math.floor(Date.now() / 1000));
+  const hourly = forecast.list.slice(0, 16).map((item) => {
+    const day = indianaDay(item.dt);
+    const isNewDay = day !== lastDay;
+    lastDay = day;
+    return {
+      time: formatHour(item.dt),
+      temp: Math.round(item.main.temp),
+      icon: owmIconMap[item.weather[0].icon] || "cloud",
+      dayLabel: isNewDay
+        ? new Date(item.dt * 1000).toLocaleDateString("en-US", {
+            timeZone: "America/Indiana/Indianapolis",
+            weekday: "short",
+          })
+        : null,
+    };
+  });
 
   // Hi/Lo from today's forecast entries
   const todayDate = new Date().toLocaleDateString("en-CA", {

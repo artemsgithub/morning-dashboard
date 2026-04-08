@@ -212,13 +212,20 @@ function WeatherCard() {
       </div>
 
       <div className="weather-hourly">
-        {weather.hourly.map((hour) => {
+        {weather.hourly.map((hour, i) => {
           const Icon = weatherIcons[hour.icon] || Cloud;
           return (
-            <div key={hour.time} className="hourly-item">
-              <span className="hourly-time">{hour.time}</span>
-              <Icon size={26} color={iconColor(hour.icon)} />
-              <span className="hourly-temp">{hour.temp}°</span>
+            <div key={i} className="hourly-group">
+              {hour.dayLabel && (
+                <div className="hourly-day-divider">
+                  <span>{hour.dayLabel}</span>
+                </div>
+              )}
+              <div className="hourly-item">
+                <span className="hourly-time">{hour.time}</span>
+                <Icon size={26} color={iconColor(hour.icon)} />
+                <span className="hourly-temp">{hour.temp}°</span>
+              </div>
             </div>
           );
         })}
