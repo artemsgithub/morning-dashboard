@@ -7,6 +7,8 @@ import placeholderWeather from "../data/placeholderWeather";
 const LAT = 39.9087;
 const LON = -86.1225;
 
+// Bump this when the cached data shape changes so old clients invalidate.
+const CACHE_VERSION = 2;
 const CACHE_KEY = "morning-dashboard-weather";
 const INDIANA_TZ = "America/Indiana/Indianapolis";
 
@@ -36,7 +38,11 @@ function loadCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // Invalidate stale schemas — e.g. old caches with only 7 hourly entries
+    // and no dayLabel field will vanish and force a refetch.
+    if (parsed?._v !== CACHE_VERSION) return null;
+    return parsed;
   } catch {
     return null;
   }
@@ -44,7 +50,7 @@ function loadCache() {
 
 /** Save weather to localStorage */
 function saveCache(data) {
-  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, _v: CACHE_VERSION }));
 }
 
 /**
