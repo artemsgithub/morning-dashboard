@@ -10,6 +10,10 @@ const LON = -86.1225;
 const CACHE_KEY = "morning-dashboard-weather";
 const INDIANA_TZ = "America/Indiana/Indianapolis";
 
+// Refresh cadence — enough to catch rolling weather changes for the
+// screensaver scene, but cheap on API quota (8 calls/day).
+const REFRESH_INTERVAL_MS = 3 * 60 * 60 * 1000; // 3 hours
+
 /** Get current hour in Indiana time */
 function indianaHour() {
   return parseInt(
@@ -48,9 +52,16 @@ function saveCache(data) {
  * - Yes if no cache exists
  * - Yes if cached data is from a different day (Indiana time)
  * - Yes if it's 7am+ Indiana time and data was fetched before 7am today
+ * - Yes if more than REFRESH_INTERVAL_MS has elapsed since last fetch
  */
 function shouldFetch(cached) {
   if (!cached || !cached.fetchedAt) return true;
+
+  const fetchedAt = new Date(cached.fetchedAt).getTime();
+  const now = Date.now();
+
+  // Stale by interval — keeps the screensaver scene in sync with actual sky
+  if (now - fetchedAt > REFRESH_INTERVAL_MS) return true;
 
   const today = indianaDate();
   const cachedDate = new Date(cached.fetchedAt).toLocaleDateString("en-CA", {

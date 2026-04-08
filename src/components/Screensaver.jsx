@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import useWeather from "../hooks/useWeather";
 
 /* ── Weather scenes — animated backgrounds keyed to condition ── */
@@ -163,23 +163,6 @@ function WeatherScene({ condition }) {
 
 function Screensaver({ onWake, exiting }) {
   const { weather } = useWeather();
-  const [now, setNow] = useState(new Date());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const time = now.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-
-  const date = now.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
 
   return (
     <div
@@ -190,16 +173,6 @@ function Screensaver({ onWake, exiting }) {
       aria-label="Tap to wake dashboard"
     >
       <WeatherScene condition={weather.conditionIcon} />
-
-      <div className="screensaver-clock-wrap">
-        <div className="screensaver-time">{time}</div>
-        <div className="screensaver-date">{date}</div>
-        <div className="screensaver-temp">
-          {weather.temperature}° · {weather.condition}
-        </div>
-      </div>
-
-      <div className="screensaver-hint">Tap to wake</div>
     </div>
   );
 }

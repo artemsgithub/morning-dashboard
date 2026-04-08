@@ -1018,78 +1018,6 @@
   100% { opacity: 0; transform: scale(1.08); filter: blur(14px); }
 }
 
-/* ── Clock overlay — drifts slowly to avoid burn-in ── */
-
-.screensaver-clock-wrap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #f3e6d2;
-  z-index: 5;
-  animation: clock-drift 240s ease-in-out infinite;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-}
-
-@keyframes clock-drift {
-  0%   { transform: translate(-50%, -50%); }
-  20%  { transform: translate(calc(-50% + 60px), calc(-50% - 40px)); }
-  40%  { transform: translate(calc(-50% - 50px), calc(-50% + 30px)); }
-  60%  { transform: translate(calc(-50% + 40px), calc(-50% + 50px)); }
-  80%  { transform: translate(calc(-50% - 60px), calc(-50% - 30px)); }
-  100% { transform: translate(-50%, -50%); }
-}
-
-.screensaver-time {
-  font-family: var(--font-display);
-  font-size: 8rem;
-  font-weight: 400;
-  letter-spacing: -4px;
-  line-height: 1;
-}
-
-.screensaver-date {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  margin-top: 8px;
-  opacity: 0.88;
-}
-
-.screensaver-temp {
-  font-family: var(--font-body);
-  font-size: 1.15rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  margin-top: 14px;
-  opacity: 0.72;
-  text-transform: capitalize;
-}
-
-.screensaver-hint {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(243, 230, 210, 0.45);
-  z-index: 5;
-  animation: hint-pulse 3s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes hint-pulse {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 0.75; }
-}
-
 /* ── Scene base ── */
 
 .scene {
@@ -1298,12 +1226,9 @@
   100% { transform: translateX(calc(100vw + 500px)); }
 }
 
-/* Shrink screensaver clock on smaller screens */
+/* Shrink screensaver scene elements on smaller screens */
 
 @media (max-width: 768px) {
-  .screensaver-time { font-size: 5rem; letter-spacing: -2px; }
-  .screensaver-date { font-size: 1.2rem; }
-  .screensaver-temp { font-size: 0.95rem; }
   .moon-body { width: 120px; height: 120px; top: 15%; right: 12%; }
   .sun-glow { width: 600px; height: 600px; }
   .sun-core { width: 150px; height: 150px; margin: -75px 0 0 -75px; }
