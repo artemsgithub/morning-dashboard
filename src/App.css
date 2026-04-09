@@ -1087,6 +1087,51 @@
 
 .scene-sun {
   background: linear-gradient(180deg, #e8a33d 0%, #d4793a 40%, #8a3f2a 100%);
+  animation: sun-sky-shift 30s ease-in-out infinite;
+}
+
+@keyframes sun-sky-shift {
+  0%, 100% { filter: hue-rotate(0deg) saturate(1); }
+  50%      { filter: hue-rotate(-6deg) saturate(1.08); }
+}
+
+/* Slowly rotating sun rays — a repeating conic gradient creates the
+   mid-century "starburst" silhouette behind the sun core. */
+.sun-rays {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 1400px;
+  height: 1400px;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255, 220, 140, 0.22) 0deg,
+    rgba(255, 220, 140, 0.22) 6deg,
+    transparent 6deg,
+    transparent 18deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    transparent 120px,
+    black 160px,
+    black 520px,
+    transparent 640px
+  );
+  mask-image: radial-gradient(
+    circle,
+    transparent 120px,
+    black 160px,
+    black 520px,
+    transparent 640px
+  );
+  animation: sun-rays-rotate 120s linear infinite;
+  opacity: 0.75;
+}
+
+@keyframes sun-rays-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .sun-glow {
@@ -1129,6 +1174,27 @@
   50%      { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
 }
 
+/* Warm dust motes drifting upward in the sunlight */
+.sun-dust {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 240, 200, 0.9) 0%,
+    rgba(255, 230, 170, 0.4) 45%,
+    transparent 75%
+  );
+  animation: dust-float linear infinite;
+  pointer-events: none;
+}
+
+@keyframes dust-float {
+  0%   { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  15%  { opacity: 0.9; }
+  85%  { opacity: 0.6; }
+  100% { transform: translate(var(--drift, 0), -60vh) scale(1.2); opacity: 0; }
+}
+
 /* ── Moon / night scene ── */
 
 .scene-moon {
@@ -1147,7 +1213,7 @@
 
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; transform: scale(0.8); }
-  50%      { opacity: 1;   transform: scale(1.2); }
+  50%      { opacity: 1;   transform: scale(1.3); }
 }
 
 .moon-body {
@@ -1175,6 +1241,95 @@
   50%      { transform: translate(-20px, -10px); }
 }
 
+/* A long, soft wisp of cloud that drifts past the moon */
+.moon-wisp {
+  position: absolute;
+  top: 24%;
+  left: -40%;
+  width: 70%;
+  height: 90px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(180, 190, 220, 0.22) 0%,
+    rgba(180, 190, 220, 0.08) 55%,
+    transparent 80%
+  );
+  border-radius: 50%;
+  filter: blur(14px);
+  animation: moon-wisp-drift 90s linear infinite;
+}
+
+@keyframes moon-wisp-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(180vw); }
+}
+
+/* Shooting star — a dot with a trailing streak. Two instances with
+   very different cycle lengths never sync, so the flashes feel random. */
+.shooting-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f3e6d2;
+  box-shadow: 0 0 6px 2px rgba(243, 230, 210, 0.9);
+  opacity: 0;
+}
+
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  width: 140px;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(243, 230, 210, 0.8) 100%
+  );
+  transform: translateY(-50%);
+  filter: blur(0.5px);
+}
+
+.shooting-star-1 {
+  top: 18%;
+  left: 15%;
+  animation: shoot-1 17s ease-out infinite;
+}
+
+.shooting-star-2 {
+  top: 35%;
+  left: 55%;
+  animation: shoot-2 23s ease-out infinite;
+}
+
+/* Very short active window (~1s), long dark window — looks like a
+   rare event, not a metronome. */
+@keyframes shoot-1 {
+  0%, 92% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  93%  { opacity: 1; }
+  100% {
+    transform: translate(420px, 260px);
+    opacity: 0;
+  }
+}
+
+@keyframes shoot-2 {
+  0%, 88% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  89%  { opacity: 1; }
+  100% {
+    transform: translate(-380px, 220px);
+    opacity: 0;
+  }
+}
+
 /* ── Rain scene ── */
 
 .scene-rain {
@@ -1195,21 +1350,93 @@
 .raindrop {
   position: absolute;
   top: -60px;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    rgba(180, 210, 230, 0) 0%,
-    rgba(180, 210, 230, 0.7) 50%,
-    rgba(180, 210, 230, 0.9) 100%
-  );
   border-radius: 1px;
   animation: rain-fall linear infinite;
 }
 
+.raindrop-near {
+  width: 2.5px;
+  background: linear-gradient(
+    180deg,
+    rgba(190, 220, 240, 0) 0%,
+    rgba(190, 220, 240, 0.8) 50%,
+    rgba(210, 230, 245, 0.95) 100%
+  );
+}
+
+.raindrop-far {
+  width: 1.5px;
+  opacity: 0.55;
+  background: linear-gradient(
+    180deg,
+    rgba(160, 190, 210, 0) 0%,
+    rgba(160, 190, 210, 0.55) 50%,
+    rgba(170, 200, 220, 0.7) 100%
+  );
+  filter: blur(0.5px);
+}
+
 @keyframes rain-fall {
-  0%   { transform: translateY(0);   opacity: 0; }
+  0%   { transform: translateY(0);    opacity: 0; }
   10%  { opacity: 1; }
   100% { transform: translateY(110vh); opacity: 0.7; }
+}
+
+/* Soft mist rising from the bottom to imply ground spray */
+.rain-mist {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(90, 110, 125, 0.28) 55%,
+    rgba(60, 80, 95, 0.45) 100%
+  );
+  animation: mist-breathe 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes mist-breathe {
+  0%, 100% { opacity: 0.7; transform: translateY(0); }
+  50%      { opacity: 1;   transform: translateY(-8px); }
+}
+
+/* Lightning — a brief, very bright flash overlay. Two instances with
+   different cycle lengths give an unpredictable, thunderstormy feel. */
+.lightning {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 20%,
+    rgba(255, 245, 220, 0.85) 0%,
+    rgba(255, 240, 210, 0.4) 30%,
+    transparent 65%
+  );
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.lightning-a { animation: lightning-flash-a 13s linear infinite; }
+.lightning-b { animation: lightning-flash-b 19s linear infinite; }
+
+@keyframes lightning-flash-a {
+  0%, 82%   { opacity: 0; }
+  83%, 84%  { opacity: 1; }
+  85%       { opacity: 0.2; }
+  86%, 87%  { opacity: 0.9; }
+  88%, 100% { opacity: 0; }
+}
+
+@keyframes lightning-flash-b {
+  0%, 74%    { opacity: 0; }
+  75%        { opacity: 0.8; }
+  76%, 77%   { opacity: 0.1; }
+  78%        { opacity: 1; }
+  79%, 100%  { opacity: 0; }
 }
 
 /* ── Snow scene ── */
@@ -1222,16 +1449,29 @@
   position: absolute;
   top: -40px;
   color: #f3e6d2;
-  opacity: 0.85;
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
   animation: snow-fall linear infinite;
   user-select: none;
 }
 
+.snowflake-near {
+  opacity: 0.9;
+}
+
+.snowflake-far {
+  opacity: 0.45;
+  filter: blur(1px);
+}
+
+/* S-curve drift via multi-step keyframes — feels windier than a
+   straight-line translate. */
 @keyframes snow-fall {
   0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-  10%  { opacity: 0.9; }
-  100% { transform: translate(var(--drift, 0), 110vh) rotate(360deg); opacity: 0.3; }
+  8%   { opacity: 0.95; }
+  25%  { transform: translate(calc(var(--drift, 0) * 0.4), 25vh) rotate(90deg); }
+  50%  { transform: translate(calc(var(--drift, 0) * -0.3), 50vh) rotate(180deg); }
+  75%  { transform: translate(calc(var(--drift, 0) * 0.7), 75vh) rotate(270deg); }
+  100% { transform: translate(var(--drift, 0), 110vh) rotate(360deg); opacity: 0.2; }
 }
 
 /* ── Cloud scene (default/overcast/fog) ── */
@@ -1242,7 +1482,7 @@
 
 .drift-cloud {
   position: absolute;
-  left: -240px;
+  left: -260px;
   width: 220px;
   height: 80px;
   background: radial-gradient(
@@ -1253,7 +1493,8 @@
   );
   border-radius: 50%;
   animation: cloud-drift linear infinite;
-  filter: blur(8px);
+  transform: scale(var(--cloud-scale, 1));
+  will-change: transform;
 }
 
 .drift-cloud::before,
@@ -1278,9 +1519,33 @@
   right: 30px;
 }
 
+/* Back layer — tiny, faded, slow. Sits deep in the sky. */
+.cloud-back {
+  opacity: 0.45;
+  filter: blur(14px);
+}
+
+/* Middle layer — medium everything. */
+.cloud-mid {
+  opacity: 0.7;
+  filter: blur(10px);
+}
+
+/* Front layer — large, crisp, fast, with a gentle vertical bob. */
+.cloud-front {
+  opacity: 0.95;
+  filter: blur(6px);
+  animation: cloud-drift linear infinite, cloud-bob 11s ease-in-out infinite;
+}
+
 @keyframes cloud-drift {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(calc(100vw + 500px)); }
+  0%   { transform: translateX(0) scale(var(--cloud-scale, 1)); }
+  100% { transform: translateX(calc(100vw + 520px)) scale(var(--cloud-scale, 1)); }
+}
+
+@keyframes cloud-bob {
+  0%, 100% { margin-top: 0; }
+  50%      { margin-top: 14px; }
 }
 
 /* Shrink screensaver scene elements on smaller screens */
