@@ -56,4 +56,101 @@ export function getRandomAffirmation() {
   return affirmations[Math.floor(Math.random() * affirmations.length)];
 }
 
+// ── Daily-rotation picker ──────────────────────────────────────────
+// A shuffled queue of indices is kept in localStorage. Each call that
+// needs a fresh pick pops the front of the queue. When the queue is
+// empty, we reshuffle — and make sure the just-seen affirmation isn't
+// the first one out of the new deck, so there's never a back-to-back
+// repeat across cycles. Every affirmation is shown once before any
+// affirmation repeats.
+
+const STATE_KEY = "morning-dashboard-affirmation-state";
+
+function todayString() {
+  return new Date().toLocaleDateString("en-CA"); // YYYY-MM-DD
+}
+
+/** Fisher–Yates shuffle of [0..n-1] */
+function shuffledIndices(n) {
+  const arr = Array.from({ length: n }, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw);
+    // If the pool size changed (affirmations.js was edited), invalidate
+    // so the new entries get mixed in on the next reshuffle.
+    if (state.poolSize !== affirmations.length) {
+      return { todayIndex: state.todayIndex, todayDate: state.todayDate };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+function saveState(state) {
+  localStorage.setItem(
+    STATE_KEY,
+    JSON.stringify({ ...state, poolSize: affirmations.length })
+  );
+}
+
+/** Build a fresh shuffled queue that doesn't start with `avoidIndex`. */
+function buildQueue(avoidIndex) {
+  const queue = shuffledIndices(affirmations.length);
+  if (avoidIndex != null && queue.length > 1 && queue[0] === avoidIndex) {
+    // Send the duplicate to the back of the new cycle.
+    [queue[0], queue[queue.length - 1]] = [queue[queue.length - 1], queue[0]];
+  }
+  return queue;
+}
+
+/** Pop the next index, reshuffling when the queue is empty. */
+function pickNext(state) {
+  let queue = state?.queue ?? [];
+  if (queue.length === 0) {
+    queue = buildQueue(state?.todayIndex);
+  }
+  const [index, ...rest] = queue;
+  return { index, queue: rest };
+}
+
+/**
+ * Today's affirmation — stable for the whole day. First call on a new
+ * day advances the queue; later calls on the same day return the same
+ * pick without mutating anything.
+ */
+export function getDailyAffirmation() {
+  const state = loadState();
+  const today = todayString();
+
+  if (state && state.todayDate === today && state.todayIndex != null) {
+    return affirmations[state.todayIndex];
+  }
+
+  const { index, queue } = pickNext(state);
+  saveState({ queue, todayIndex: index, todayDate: today });
+  return affirmations[index];
+}
+
+/**
+ * Manually advance to the next affirmation (for the "New affirmation"
+ * button). Always pops the queue, so the user can walk through the
+ * whole rotation without ever seeing a duplicate.
+ */
+export function getNextAffirmation() {
+  const state = loadState();
+  const { index, queue } = pickNext(state);
+  saveState({ queue, todayIndex: index, todayDate: todayString() });
+  return affirmations[index];
+}
+
 export default affirmations;
