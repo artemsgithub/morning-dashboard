@@ -101,6 +101,18 @@ export function getPressure3hAgo() {
   }
 }
 
+/** Return the full 24-hour pressure history sorted by time. */
+export function getPressureHistory() {
+  try {
+    const raw = localStorage.getItem(PRESSURE_HISTORY_KEY);
+    if (!raw) return [];
+    const history = JSON.parse(raw);
+    return history.sort((a, b) => a.ts - b.ts);
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Should we fetch fresh data?
  * - Yes if no cache exists
