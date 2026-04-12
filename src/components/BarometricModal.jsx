@@ -79,15 +79,18 @@ function interpret(hPa, change3h) {
    3-hour change visible rather than calculated.
    ═══════════════════════════════════════════════════════ */
 
-const ARC_START = 220;  // degrees (left of bottom)
-const ARC_END = 320;    // degrees (right of bottom)
+// Semicircular gauge: 240° sweep from lower-left (low pressure)
+// up over the top to lower-right (high pressure).
+const ARC_START_DEG = 210;  // lower-left
+const ARC_SWEEP_DEG = 240;  // → passes through 90° (top) → ends at -30° (lower-right)
 const GAUGE_MIN = 960;
 const GAUGE_MAX = 1060;
 
 function pressureToAngle(hPa) {
   const clamped = Math.max(GAUGE_MIN, Math.min(GAUGE_MAX, hPa));
   const pct = (clamped - GAUGE_MIN) / (GAUGE_MAX - GAUGE_MIN);
-  return ARC_START - pct * (ARC_END - ARC_START);
+  return ARC_START_DEG - pct * ARC_SWEEP_DEG;
+  // pct=0 → 210° (lower-left), pct=0.5 → 90° (top), pct=1 → -30° (lower-right)
 }
 
 function polar(cx, cy, r, deg) {
@@ -103,7 +106,8 @@ function arc(cx, cy, r, a1, a2) {
 }
 
 function Gauge({ pressure, pressure3hAgo }) {
-  const cx = 150, cy = 150, r = 120;
+  const cx = 150, cy = 140, r = 105;
+  const labelR = r + 20; // zone labels just outside the arc
 
   const zoneArcs = useMemo(() => {
     const out = [];
@@ -112,7 +116,10 @@ function Gauge({ pressure, pressure3hAgo }) {
       const from = Math.max(prev, GAUGE_MIN);
       const to = Math.min(z.max, GAUGE_MAX);
       if (from >= GAUGE_MAX || to <= GAUGE_MIN) { prev = z.max; continue; }
-      out.push({ d: arc(cx, cy, r, pressureToAngle(from), pressureToAngle(to)), color: z.color });
+      out.push({
+        d: arc(cx, cy, r, pressureToAngle(from), pressureToAngle(to)),
+        color: z.color,
+      });
       prev = z.max;
     }
     return out;
@@ -125,7 +132,7 @@ function Gauge({ pressure, pressure3hAgo }) {
       const from = Math.max(prev, GAUGE_MIN);
       const to = Math.min(z.max, GAUGE_MAX);
       if (from >= GAUGE_MAX || to <= GAUGE_MIN) { prev = z.max; continue; }
-      const pos = polar(cx, cy, r + 22, pressureToAngle((from + to) / 2));
+      const pos = polar(cx, cy, labelR, pressureToAngle((from + to) / 2));
       out.push({ ...pos, text: z.label.toUpperCase() });
       prev = z.max;
     }
@@ -133,22 +140,25 @@ function Gauge({ pressure, pressure3hAgo }) {
   }, []);
 
   const needleAngle = pressureToAngle(pressure);
-  const needleTip = polar(cx, cy, r - 16, needleAngle);
-  const needleBase = polar(cx, cy, 18, needleAngle);
+  const needleTip = polar(cx, cy, r - 14, needleAngle);
+  const needleBase = polar(cx, cy, 16, needleAngle);
 
   let ghostTip = null, ghostBase = null;
   if (pressure3hAgo != null) {
     const ga = pressureToAngle(pressure3hAgo);
-    ghostTip = polar(cx, cy, r - 28, ga);
-    ghostBase = polar(cx, cy, 18, ga);
+    ghostTip = polar(cx, cy, r - 26, ga);
+    ghostBase = polar(cx, cy, 16, ga);
   }
 
   return (
-    <svg viewBox="0 0 300 210" className="baro-gauge-svg">
+    <svg viewBox="-5 0 310 210" className="baro-gauge-svg">
+      {/* Arc segments */}
       {zoneArcs.map((a, i) => (
         <path key={i} d={a.d} fill="none" stroke={a.color}
-              strokeWidth="14" strokeLinecap="round" opacity="0.55" />
+              strokeWidth="12" strokeLinecap="round" opacity="0.55" />
       ))}
+
+      {/* Zone labels */}
       {zoneLabels.map((l, i) => (
         <text key={i} x={l.x} y={l.y} textAnchor="middle"
               dominantBaseline="middle" className="baro-zone-label">
@@ -157,30 +167,30 @@ function Gauge({ pressure, pressure3hAgo }) {
       ))}
 
       {/* Hub */}
-      <circle cx={cx} cy={cy} r="10" fill="var(--walnut)" opacity="0.2" />
-      <circle cx={cx} cy={cy} r="6" fill="var(--clay)" />
+      <circle cx={cx} cy={cy} r="9" fill="var(--walnut)" opacity="0.2" />
+      <circle cx={cx} cy={cy} r="5" fill="var(--clay)" />
 
       {/* Ghost needle — "where you were" */}
       {ghostTip && ghostBase && (
         <>
           <line x1={ghostBase.x} y1={ghostBase.y} x2={ghostTip.x} y2={ghostTip.y}
-                stroke="var(--text-muted)" strokeWidth="3" strokeLinecap="round"
-                opacity="0.3" strokeDasharray="5 4" />
-          <text x={ghostTip.x} y={ghostTip.y - 8} textAnchor="middle"
+                stroke="var(--text-muted)" strokeWidth="2.5" strokeLinecap="round"
+                opacity="0.3" strokeDasharray="4 3" />
+          <text x={ghostTip.x} y={ghostTip.y - 7} textAnchor="middle"
                 className="baro-ghost-label">3h ago</text>
         </>
       )}
 
       {/* Current needle */}
       <line x1={needleBase.x} y1={needleBase.y} x2={needleTip.x} y2={needleTip.y}
-            stroke="var(--clay)" strokeWidth="4" strokeLinecap="round"
+            stroke="var(--clay)" strokeWidth="3.5" strokeLinecap="round"
             style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.3))" }} />
 
-      {/* Reading at hub */}
-      <text x={cx} y={cy + 30} textAnchor="middle" className="baro-reading-hpa">
+      {/* Reading below the hub */}
+      <text x={cx} y={cy + 26} textAnchor="middle" className="baro-reading-hpa">
         {pressure} hPa
       </text>
-      <text x={cx} y={cy + 46} textAnchor="middle" className="baro-reading-inhg">
+      <text x={cx} y={cy + 40} textAnchor="middle" className="baro-reading-inhg">
         {hPaToInHg(pressure)} inHg
       </text>
     </svg>

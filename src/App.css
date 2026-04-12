@@ -711,7 +711,7 @@
   display: block;
   width: 100%;
   max-width: 300px;
-  margin: 0 auto;
+  margin: 0 auto 12px;
 }
 
 .baro-zone-label {
