@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Sun,
   CloudSun,
@@ -16,11 +15,9 @@ import {
   Umbrella,
   Moon,
   RefreshCw,
-  Activity,
 } from "lucide-react";
 import useWeather from "../hooks/useWeather";
 import MoonPhase from "./MoonPhase";
-import BarometricModal from "./BarometricModal";
 
 const weatherIcons = {
   sun: Sun,
@@ -188,7 +185,6 @@ function SunArc({ sunrise, sunset }) {
 function WeatherCard() {
   const { weather, loading, refresh } = useWeather();
   const ConditionIcon = weatherIcons[weather.conditionIcon] || Cloud;
-  const [showBaro, setShowBaro] = useState(false);
 
   return (
     <div className="card weather-card">
@@ -281,32 +277,15 @@ function WeatherCard() {
         </div>
       </div>
 
-      <div className="weather-footer">
-        <button
-          className="weather-refresh"
-          onClick={() => setShowBaro(true)}
-          title="Barometric pressure"
-        >
-          <Activity size={14} />
-          <span>Pressure</span>
-        </button>
-        <button
-          className="weather-refresh"
-          onClick={refresh}
-          disabled={loading}
-          title="Refresh weather"
-        >
-          <RefreshCw size={14} className={loading ? "spin" : ""} />
-          <span>{loading ? "Updating…" : "Refresh"}</span>
-        </button>
-      </div>
-
-      {showBaro && (
-        <BarometricModal
-          pressure={weather.pressure}
-          onClose={() => setShowBaro(false)}
-        />
-      )}
+      <button
+        className="weather-refresh"
+        onClick={refresh}
+        disabled={loading}
+        title="Refresh weather"
+      >
+        <RefreshCw size={14} className={loading ? "spin" : ""} />
+        <span>{loading ? "Updating…" : "Refresh"}</span>
+      </button>
     </div>
   );
 }

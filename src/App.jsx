@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { Activity } from "lucide-react";
 import ClockHeader from "./components/ClockHeader";
 import WeatherCard from "./components/WeatherCard";
 import RemindersCard from "./components/RemindersCard";
 import AffirmationCard from "./components/AffirmationCard";
+import BarometricModal from "./components/BarometricModal";
 import Screensaver from "./components/Screensaver";
 import useWakeLock from "./hooks/useWakeLock";
+import useWeather from "./hooks/useWeather";
 import useInactivity from "./hooks/useInactivity";
 import "./App.css";
 
@@ -27,6 +30,8 @@ function useNightMode() {
 function App() {
   useWakeLock();
   const isNight = useNightMode();
+  const { weather } = useWeather();
+  const [showBaro, setShowBaro] = useState(false);
 
   // Show screensaver by default on launch and after 5 min idle.
   const [asleep, setAsleep] = useState(true);
@@ -58,6 +63,16 @@ function App() {
     <>
       <div className={`dashboard ${isNight ? "night-mode" : ""}`}>
         <ClockHeader />
+
+        <button
+          className="baro-fab"
+          onClick={() => setShowBaro(true)}
+          title="Barometric pressure"
+          aria-label="Barometric pressure"
+        >
+          <Activity size={18} />
+        </button>
+
         <div className="dashboard-grid">
           <WeatherCard />
           <div className="dashboard-sidebar">
@@ -66,6 +81,13 @@ function App() {
           </div>
         </div>
       </div>
+
+      {showBaro && (
+        <BarometricModal
+          pressure={weather.pressure}
+          onClose={() => setShowBaro(false)}
+        />
+      )}
       {asleep && <Screensaver onWake={wake} exiting={exiting} />}
     </>
   );
