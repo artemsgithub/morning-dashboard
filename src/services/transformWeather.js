@@ -193,6 +193,7 @@ export function transformWeatherData({ current, forecast, airQuality }) {
     },
     sunrise: formatTime(current.sys.sunrise, { minute: "2-digit" }),
     sunset: formatTime(current.sys.sunset, { minute: "2-digit" }),
+    pressure: current.main.pressure, // hPa
     rain,
     hourly,
     fetchedAt: Date.now(),

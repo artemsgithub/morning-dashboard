@@ -15,6 +15,7 @@ const placeholderWeather = {
   },
   sunrise: "6:48 AM",
   sunset: "7:32 PM",
+  pressure: 1013,
   rain: {
     willRain: true,
     chance: 35,

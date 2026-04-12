@@ -563,10 +563,15 @@
   height: 18px;
 }
 
-/* Weather refresh button */
+/* Weather footer — holds Pressure + Refresh buttons side by side */
+
+.weather-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
 
 .weather-refresh {
-  align-self: flex-end;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -599,6 +604,200 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   Barometric Pressure Modal
+   ═══════════════════════════════════════════════════════ */
+
+.baro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(60, 40, 20, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: baro-fade-in 0.25s ease-out;
+}
+
+@keyframes baro-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.baro-modal {
+  position: relative;
+  width: 380px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  background:
+    linear-gradient(135deg, rgba(245, 230, 216, 0.4) 0%, transparent 50%),
+    var(--cream);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 36px 32px 32px;
+  box-shadow:
+    0 8px 48px rgba(60, 40, 20, 0.18),
+    0 2px 12px rgba(60, 40, 20, 0.08);
+  animation: baro-pop-in 0.3s ease-out;
+  scrollbar-width: none;
+}
+
+.baro-modal::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes baro-pop-in {
+  from { opacity: 0; transform: scale(0.94) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.baro-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+
+.baro-close:hover {
+  color: var(--walnut);
+}
+
+.baro-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* ── Gauge SVG ── */
+
+.baro-gauge-svg {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.baro-zone-label {
+  font-family: var(--font-body);
+  font-size: 6.5px;
+  font-weight: 600;
+  fill: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.baro-reading-hpa {
+  font-family: var(--font-display);
+  font-size: 14px;
+  fill: var(--walnut);
+}
+
+.baro-reading-inhg {
+  font-family: var(--font-body);
+  font-size: 8px;
+  fill: var(--text-muted);
+}
+
+/* ── Zone name ── */
+
+.baro-zone-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: 2px;
+  margin: 4px 0 20px;
+}
+
+/* ── Stats row ── */
+
+.baro-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.baro-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.baro-stat-label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.baro-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--walnut);
+}
+
+/* ── What this means ── */
+
+.baro-meaning {
+  margin-top: 20px;
+  background: rgba(245, 230, 216, 0.35);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--clay);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.baro-meaning-label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.baro-meaning-text {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ── Footnote ── */
+
+.baro-footnote {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  margin-top: 16px;
+  padding: 0 8px;
 }
 
 /* ── Affirmation card ── */

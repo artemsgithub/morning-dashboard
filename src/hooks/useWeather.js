@@ -8,8 +8,9 @@ const LAT = 39.9087;
 const LON = -86.1225;
 
 // Bump this when the cached data shape changes so old clients invalidate.
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CACHE_KEY = "morning-dashboard-weather";
+const PRESSURE_HISTORY_KEY = "morning-dashboard-pressure-history";
 const INDIANA_TZ = "America/Indiana/Indianapolis";
 
 // Refresh cadence — enough to catch rolling weather changes for the
@@ -51,6 +52,53 @@ function loadCache() {
 /** Save weather to localStorage */
 function saveCache(data) {
   localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, _v: CACHE_VERSION }));
+  // Track pressure history for the barometric modal (keep last 24h).
+  if (data.pressure != null) {
+    recordPressure(data.pressure, data.fetchedAt);
+  }
+}
+
+/** Append a pressure reading and prune entries older than 24 hours. */
+function recordPressure(hPa, timestamp) {
+  try {
+    const raw = localStorage.getItem(PRESSURE_HISTORY_KEY);
+    const history = raw ? JSON.parse(raw) : [];
+    history.push({ hPa, ts: timestamp });
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const pruned = history.filter((e) => e.ts > cutoff);
+    localStorage.setItem(PRESSURE_HISTORY_KEY, JSON.stringify(pruned));
+  } catch {
+    // Storage full or corrupt — start fresh.
+    localStorage.setItem(
+      PRESSURE_HISTORY_KEY,
+      JSON.stringify([{ hPa, ts: timestamp }])
+    );
+  }
+}
+
+/** Read the pressure from ~3 hours ago (closest entry). */
+export function getPressure3hAgo() {
+  try {
+    const raw = localStorage.getItem(PRESSURE_HISTORY_KEY);
+    if (!raw) return null;
+    const history = JSON.parse(raw);
+    const target = Date.now() - 3 * 60 * 60 * 1000;
+    // Find the entry closest to 3h ago
+    let best = null;
+    let bestDelta = Infinity;
+    for (const entry of history) {
+      const delta = Math.abs(entry.ts - target);
+      if (delta < bestDelta) {
+        best = entry;
+        bestDelta = delta;
+      }
+    }
+    // Only trust it if it's within 1.5 hours of the 3h mark
+    if (best && bestDelta < 1.5 * 60 * 60 * 1000) return best.hPa;
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 /**
