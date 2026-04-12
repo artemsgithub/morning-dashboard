@@ -53,17 +53,19 @@ function App() {
   };
 
   return (
-    <div className={`dashboard ${isNight ? "night-mode" : ""}`}>
-      <ClockHeader />
-      <div className="dashboard-grid">
-        <WeatherCard />
-        <div className="dashboard-sidebar">
-          <AffirmationCard />
-          <RemindersCard />
+    <>
+      <div className={`dashboard ${isNight ? "night-mode" : ""}`}>
+        <ClockHeader />
+        <div className="dashboard-grid">
+          <WeatherCard />
+          <div className="dashboard-sidebar">
+            <AffirmationCard />
+            <RemindersCard />
+          </div>
         </div>
       </div>
       {asleep && <Screensaver onWake={wake} exiting={exiting} />}
-    </div>
+    </>
   );
 }
 
