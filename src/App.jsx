@@ -49,6 +49,8 @@ function App() {
       setAsleep(false);
       setExiting(false);
       reset();
+      // Signal weather to refresh so the user sees current data.
+      window.dispatchEvent(new Event("dashboard-wake"));
     }, 700);
   };
 

@@ -134,5 +134,12 @@ export default function useWeather() {
     return () => clearInterval(id);
   }, [fetchWeather]);
 
+  // Refresh when the user wakes the dashboard from the screensaver.
+  useEffect(() => {
+    const onWake = () => fetchWeather();
+    window.addEventListener("dashboard-wake", onWake);
+    return () => window.removeEventListener("dashboard-wake", onWake);
+  }, [fetchWeather]);
+
   return { weather, loading, error, refresh: fetchWeather };
 }
