@@ -15,9 +15,11 @@ import {
   Umbrella,
   Moon,
   RefreshCw,
+  Shirt,
 } from "lucide-react";
 import useWeather from "../hooks/useWeather";
 import MoonPhase from "./MoonPhase";
+import { getOutfitSuggestion } from "../utils/outfitSuggestion";
 
 const weatherIcons = {
   sun: Sun,
@@ -185,6 +187,7 @@ function SunArc({ sunrise, sunset }) {
 function WeatherCard() {
   const { weather, loading, refresh } = useWeather();
   const ConditionIcon = weatherIcons[weather.conditionIcon] || Cloud;
+  const outfit = getOutfitSuggestion(weather);
 
   return (
     <div className="card weather-card">
@@ -209,6 +212,12 @@ function WeatherCard() {
             <div className="weather-location">{weather.location}</div>
           </div>
         </div>
+      </div>
+
+      <div className="weather-outfit" title="What to wear">
+        <Shirt size={16} className="weather-outfit-icon" />
+        <span className="weather-outfit-label">Wear</span>
+        <span className="weather-outfit-text">{outfit}</span>
       </div>
 
       <div className="weather-hourly">

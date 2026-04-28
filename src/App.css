@@ -175,6 +175,42 @@
   padding-bottom: 8px;
 }
 
+/* What to wear — outfit suggestion */
+
+.weather-outfit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  background: rgba(245, 230, 216, 0.32);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--clay);
+  border-radius: 12px;
+  margin-top: -8px; /* pull closer to header — gap is 24px otherwise */
+}
+
+.weather-outfit-icon {
+  color: var(--clay);
+  flex-shrink: 0;
+}
+
+.weather-outfit-label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.weather-outfit-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
 /* Hourly strip */
 
 .weather-hourly {
