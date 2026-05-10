@@ -207,17 +207,16 @@ function WeatherCard() {
                   <span>H: {weather.high}°</span>
                   <span>L: {weather.low}°</span>
                 </div>
+                <div className="weather-outfit" title="What to wear">
+                  <Shirt size={13} className="weather-outfit-icon" />
+                  <span className="weather-outfit-label">Wear</span>
+                  <span className="weather-outfit-text">{outfit}</span>
+                </div>
               </div>
             </div>
             <div className="weather-location">{weather.location}</div>
           </div>
         </div>
-      </div>
-
-      <div className="weather-outfit" title="What to wear">
-        <Shirt size={16} className="weather-outfit-icon" />
-        <span className="weather-outfit-label">Wear</span>
-        <span className="weather-outfit-text">{outfit}</span>
       </div>
 
       <div className="weather-hourly">

@@ -175,18 +175,17 @@
   padding-bottom: 8px;
 }
 
-/* What to wear — outfit suggestion */
+/* What to wear — sits under the H/L line in the temp meta column */
 
 .weather-outfit {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 16px;
-  background: rgba(245, 230, 216, 0.32);
-  border: 1px solid var(--card-border);
-  border-left: 3px solid var(--clay);
-  border-radius: 12px;
-  margin-top: -8px; /* pull closer to header — gap is 24px otherwise */
+  gap: 6px;
+  margin-top: 4px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
 }
 
 .weather-outfit-icon {
@@ -195,20 +194,16 @@
 }
 
 .weather-outfit-label {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   color: var(--text-muted);
   flex-shrink: 0;
 }
 
 .weather-outfit-text {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
   color: var(--text-primary);
-  line-height: 1.4;
 }
 
 /* Hourly strip */
