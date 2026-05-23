@@ -102,7 +102,7 @@
 .weather-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   overflow-y: auto;
   overflow-x: hidden; /* lets inner hourly strip own its horizontal scroll */
   min-height: 0;
@@ -180,12 +180,12 @@
 .weather-outfit {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 5px;
+  margin-top: 2px;
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .weather-outfit-icon {
@@ -212,7 +212,7 @@
   display: flex;
   align-items: stretch;
   gap: 22px;
-  padding: 20px 4px;
+  padding: 14px 4px;
   border-top: 1px solid var(--card-border);
   border-bottom: 1px solid var(--card-border);
 
@@ -272,7 +272,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--text-secondary);
   flex-shrink: 0;
   min-width: 44px;
